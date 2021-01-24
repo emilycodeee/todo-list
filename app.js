@@ -1,4 +1,5 @@
 const express = require('express')
+const exshbs = require('express-handlebars')
 const app = express()
 // 載入 mongoose
 const mongoose = require('mongoose')
@@ -16,9 +17,12 @@ db.once('open', () => {
   console.log('mongodb connected!')
 })
 
+app.engine('hbs', exshbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
 app.get('/', (req, res) => {
 
-  res.send('hello word!!!!!!!!')
+  res.render('index')
 })
 
 app.listen(3000, () => {
