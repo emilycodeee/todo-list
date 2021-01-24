@@ -31,20 +31,21 @@ app.get('/', (req, res) => {
     .catch(error => console.error(error))
 })
 
+// 取得新增頁面
 app.get('/todos/new', (req, res) => {
   return res.render('new')
 })
 
+// 取得特定todo
 app.get('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .lean()
     .then((todo) => res.render('detail', { todo }))
     .catch(error => console.log(error))
-
-
 })
 
+// 新增todo
 app.post('/todos', (req, res) => {
   const name = req.body.name
   // const todo = New Todo ({name})
@@ -54,7 +55,28 @@ app.post('/todos', (req, res) => {
   return Todo.create({ name })
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
+})
 
+// 進入修改頁
+app.get('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  return Todo.findById(id)
+    .lean()
+    .then((todo) => res.render('edit', { todo }))
+    .catch(error => console.log(error))
+})
+
+// 重新放入改值後的修改資料
+app.post('/todos/:id/edit', (req, res) => {
+  const id = req.params.id
+  const name = req.body.name
+  return Todo.findById(id)
+    .then((todo) => {
+      todo.name = name
+      return todo.save()
+    })
+    .then(() => res.redirect(`/todos/${id}`))
+    .catch(error => console.log(error))
 })
 
 app.listen(3000, () => {
