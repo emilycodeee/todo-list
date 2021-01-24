@@ -1,6 +1,7 @@
 const express = require('express')
 const exshbs = require('express-handlebars')
 const app = express()
+const bodyParser = require('body-parser')
 const Todo = require('./models/todo')
 // 載入 mongoose
 const mongoose = require('mongoose')
@@ -21,11 +22,32 @@ db.once('open', () => {
 app.engine('hbs', exshbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+app.use(bodyParser.urlencoded({ extended: true }))
+
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
+})
+
+app.get('/todos/new', (req, res) => {
+  return res.render('new')
+})
+
+app.post('/todos', (req, res) => {
+  const name = req.body.name
+
+  // const todo = New Todo ({name})
+  // return todo.save()
+  //     .then(()=> res.redirect('/'))
+  //     .catch(error => console.log(error))
+
+
+  return Todo.create({ name })
+    .then(() => res.redirect('/'))
+    .catch(error => console.log(error))
+
 })
 
 app.listen(3000, () => {
