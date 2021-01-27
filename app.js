@@ -27,6 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.get('/', (req, res) => {
   Todo.find()
     .lean()
+    .sort({ _id: 'asc' })
+    //'asc' ascending 'desc' desscending
     .then(todos => res.render('index', { todos }))
     .catch(error => console.error(error))
 })
