@@ -69,10 +69,17 @@ app.get('/todos/:id/edit', (req, res) => {
 // 重新放入改值後的修改資料
 app.post('/todos/:id/edit', (req, res) => {
   const id = req.params.id
-  const name = req.body.name
+  const { name, isDone } = req.body
+  // const name = req.body.name
   return Todo.findById(id)
     .then((todo) => {
       todo.name = name
+      todo.isDone = isDone === 'on'
+      // id (isDone==='on'){
+      //   todo.isDone = true
+      // }else{
+      //   todo.isDone = false
+      // }
       return todo.save()
     })
     .then(() => res.redirect(`/todos/${id}`))
