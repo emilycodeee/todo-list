@@ -3,6 +3,7 @@ const exshbs = require('express-handlebars')
 const app = express()
 const bodyParser = require('body-parser')
 const Todo = require('./models/todo')
+const methodOverride = require('method-override')
 // 載入 mongoose
 const mongoose = require('mongoose')
 // 連線至mongodb
@@ -23,6 +24,8 @@ app.engine('hbs', exshbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
 app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(methodOverride('_method'))
 
 app.get('/', (req, res) => {
   Todo.find()
@@ -69,7 +72,7 @@ app.get('/todos/:id/edit', (req, res) => {
 })
 
 // 重新放入改值後的修改資料
-app.post('/todos/:id/edit', (req, res) => {
+app.put('/todos/:id', (req, res) => {
   const id = req.params.id
   const { name, isDone } = req.body
   // const name = req.body.name
@@ -89,7 +92,7 @@ app.post('/todos/:id/edit', (req, res) => {
 })
 
 // 刪除todo
-app.post('/todos/:id/delete', (req, res) => {
+app.delete('/todos/:id', (req, res) => {
   const id = req.params.id
   return Todo.findById(id)
     .then((todo) => todo.remove())
