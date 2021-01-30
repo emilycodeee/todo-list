@@ -1,6 +1,9 @@
-{{!-- action 屬性來定義表單資料發送的位置 --}}
-{{!-- 「用 POST 方法，把資料送給 /todos 位置」 --}}
+<!-- ./views/layouts/new.handlebars -->
 <form action="/todos" method="POST">
-  <input type="text" placeholder="name" name="name">
-  <button type="submit">Create</button>
+  <div class="input-group mb-3">
+    <input type="text" placeholder="name" name="name" class="form-control">
+    <div class="input-group-append">
+      <button type="submit" class="btn btn-success">Create</button>
+    </div>
+  </div>
 </form>
